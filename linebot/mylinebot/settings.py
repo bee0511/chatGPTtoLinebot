@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from mylinebot.secret import (
+    HIDDEN_LINE_CHANNEL_SECRET,
+    HIDDEN_LINE_CHANNEL_ACCESS_TOKEN,
+    HIDDEN_SECRET_KEY,
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,17 +25,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-w#0nre0wj$&#7&f)f(+ca0u510_e0dh6ynmuf$67u-&wt6o6x5"
+SECRET_KEY = HIDDEN_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-LINE_CHANNEL_SECRET = "54f99c66f3930b4d5668b3af7bfe69dc"
-LINE_CHANNEL_ACCESS_TOKEN = "+sq/TRNQORkXLHSEoYAxlWj6gkRfUhUZRq5acid4V/WzAdxufDgbva8bDFoWe7BtDhbjb9HAselPLxegCppzf2JbcVmlHnpqRoL0wpL3TLwEWRNp46YklsKmGupAObeFJFN7TCU7g2gc+tobGOPkTwdB04t89/1O/w1cDnyilFU="
+LINE_CHANNEL_SECRET = HIDDEN_LINE_CHANNEL_SECRET
+LINE_CHANNEL_ACCESS_TOKEN = HIDDEN_LINE_CHANNEL_ACCESS_TOKEN
 
 # Need to modify after restart ngrok
 # Remember to modify the webhook URL in LINE Developer Console
-NGROK = "1ab6-140-113-136-212.ngrok-free.app"  
+NGROK = "ca6b-140-113-136-216.ngrok-free.app"
 
 ALLOWED_HOSTS = [NGROK]
 
