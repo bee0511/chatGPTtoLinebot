@@ -13,12 +13,30 @@ from linebot.models import (
     LocationSendMessage,
 )
 
+import openai
+from mylinebot.secret import OPENAI_API_KEY
+
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
+openai.api_key = OPENAI_API_KEY
+
+chat_button = False
+
+history = []
+
+
+def chat(message):
+    history.append({"role": "user", "content": message + " 請用繁體中文回答"})
+    response = openai.chat.completions.create(model="gpt-3.5-turbo", messages=history)
+    response_message = response.choices[0].message
+    history.append({"role": response_message.role, "content": response_message.content})
+
+    return response_message.content
 
 
 @csrf_exempt
 def callback(request):
+    global chat_button
     if request.method == "POST":
         signature = request.META["HTTP_X_LINE_SIGNATURE"]
         body = request.body.decode("utf-8")
@@ -68,6 +86,37 @@ def callback(request):
                             longitude=120.99814786241119,
                         )
                         line_bot_api.reply_message(event.reply_token, message)
+                    except:
+                        line_bot_api.reply_message(
+                            event.reply_token,
+                            TextSendMessage(text="Error, please try again."),
+                        )
+                elif event.message.text == "@chatGPT":  # Chat with GPT-3.5
+                    try:
+                        chat_button = not chat_button
+                        if chat_button:
+                            history.clear()
+                            line_bot_api.reply_message(
+                                event.reply_token,
+                                TextSendMessage(text="ChatGPT is on."),
+                            )
+                        else:
+                            line_bot_api.reply_message(
+                                event.reply_token,
+                                TextSendMessage(text="ChatGPT is off."),
+                            )
+                    except:
+                        line_bot_api.reply_message(
+                            event.reply_token,
+                            TextSendMessage(text="Error, please try again."),
+                        )
+                elif chat_button:
+                    try:
+                        reply = chat(event.message.text.strip())
+                        line_bot_api.reply_message(
+                            reply_token=event.reply_token,
+                            messages=TextSendMessage(text=reply),
+                        )
                     except:
                         line_bot_api.reply_message(
                             event.reply_token,

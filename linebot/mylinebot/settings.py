@@ -35,7 +35,7 @@ LINE_CHANNEL_ACCESS_TOKEN = HIDDEN_LINE_CHANNEL_ACCESS_TOKEN
 
 # Need to modify after restart ngrok
 # Remember to modify the webhook URL in LINE Developer Console
-NGROK = "ca6b-140-113-136-216.ngrok-free.app"
+NGROK = "34f1-140-113-136-219.ngrok.io"
 
 ALLOWED_HOSTS = [NGROK]
 
