@@ -34,7 +34,7 @@ LINE_CHANNEL_SECRET = HIDDEN_LINE_CHANNEL_SECRET
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-NGORK = "10f0-140-113-136-218.ngrok.io"
+NGORK = "7f80-140-113-136-213.ngrok-free.app"
 ALLOWED_HOSTS = [NGORK]
 
 
