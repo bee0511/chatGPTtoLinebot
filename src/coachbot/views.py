@@ -70,7 +70,7 @@ def linebot_chat(event, message):
 
 
 info_index = 0
-info_keys = ["年齡", "性別", "身高(cm)", "體重(kg)", "預計一週運動天數", "預計總共一週運動時間(小時)", "目標", "目標計劃時間(週)", "目標計畫開始時間", "偏好運動方式"]
+info_keys = ["年齡", "性別", "身高(cm)", "體重(kg)", "預計一週運動次數", "預計總共一週運動時間(小時)", "目標", "目標計劃時間(週)", "目標計畫開始時間", "偏好運動方式"]
 
 
 def init(event):
@@ -80,16 +80,18 @@ def init(event):
         if info_index > 0:
             personal_info[info_keys[info_index - 1]] = event.message.text
         message = "請問你的" + info_keys[info_index] + "是? "
+        if info_index == 4:
+            message += "(建議每週3-5次)"
         if info_index == 5:
-            message += "(根據衛福部的建議，一週建議運動次數是3~5次，每次運動30~60分鐘)"
+            message += " (建議每週3小時以上)"
         if info_index == 6:
             message += "(例如:減重、增肌、維持)"
         if info_index == 7:
             message += "(例如:3週、4週、5週)"
         if info_index == 8:
-            message += "(例如:2022-01-01)"
+            message += "(例如:2024/1/1)"
         if info_index == 9:
-            message += "(例如:有氧、無氧、重訓)"
+            message += "(例如:慢跑10公里, 游泳1小時, 腿部訓練1小時...)"
         linebot_chat(event, message=message)
         info_index += 1
     elif event.message.text == "@confirm":
@@ -100,7 +102,7 @@ def init(event):
         msg_to_chatGPT = "你是一名健身教練linebot，請根據以下的客戶資料，提供一個適合的健身計畫，請注意，你不需要看計畫開始時間的欄位:\n"
         for key in personal_info:
             msg_to_chatGPT += key + ":" + personal_info[key] + " "
-        msg_to_chatGPT += "\n並根據以下的格式，制定出每個週次的每日計畫，每個週次都需要包含第1天至第7天，若是規劃時間超過使用者想要運動的時間，可以將當日設定成休息日，請不要將休息日全部規劃在前幾天或是後幾天，請交錯排序休息日。請將運動替換成符合使用者提供資料的運動項目，並用 - 當作每日健身計畫中，每個項目開頭。\n"
+        msg_to_chatGPT += "\n並根據以下的格式，制定出每個週次的每日計畫，每個週次都需要包含第1天至第7天，若是規劃時間超過使用者想要運動的時間，可以將當日設定成休息日，請不要將休息日全部規劃在前幾天或是後幾天，請交錯排序休息日。請將運動替換成符合使用者提供資料的運動項目，每天不需要將所有使用者指定的運動安排上去，並用 - 當作每日健身計畫中，每個項目開頭。\n"
         msg_to_chatGPT += "例如:\n"
         msg_to_chatGPT += "週次1:\n"
         msg_to_chatGPT += "第1天:\n"
@@ -226,7 +228,7 @@ def handle_save_event(event):
 def handle_finish_event(event):
     global finish_plan 
     finish_plan = True
-    reply_message = "請問您完成了哪些項目呢?\n"
+    reply_message = "請問您完成了哪些項目呢?(請輸入週次幾, 第幾天, 哪些項目)\n"
     linebot_chat(event, reply_message)
     
     # read the plan and send it to chatGPT to get the response
